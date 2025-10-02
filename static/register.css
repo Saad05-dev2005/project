@@ -58,3 +58,16 @@ body {
     color: red;
     text-align: center;
 }
+
+.flash-message {
+  padding: 10px;
+  margin: 10px auto;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  font-weight: bold;
+}
+.flash-message.success { background-color: #d4edda; color: #155724; }
+.flash-message.danger  { background-color: #f8d7da; color: #721c24; }
+.flash-message.warning { background-color: #fff3cd; color: #856404; }

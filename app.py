@@ -110,6 +110,11 @@ def register():
         login_user(new_user)
         flash("Registration successful!", "success")
         return redirect(url_for('dashboard'))
+    else:
+        if request.method == "POST":
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash(f"{field.capitalize()} - {error}", "danger")
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
