@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - {{ current_user.username }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    <nav>
+        <h1>Task Manager</h1>
+        <div>
+            <span>Welcome {{ current_user.username }}!</span>
+        <a href="{{ url_for('logout') }}"class="logout-btn">Logout</a>
+         </div>
+        </nav>
+    <main>
+        <header>
+            <h2>Your Project</h2>
+            <a href="{{ url_for('add_project') }}" class="btn">Add Projects</a> 
+        </header>
+
+        {% if projects %}
+        <section class="projects">
+            {% for project in projects %}
+            <article class="project-card">
+            <h3>{{ project.name }}</h3>
+            <p>{{ project.description or "No description" }}</p>
+            <p>Progress: {{ project.progress }}%</p>
+            <div class="progress-bar">
+                <div class="progress" data-progress="{{ project.progress }}">
+                </div>
+            </div>
+            <a href="{{ url_for('tasks', project_id=project.id) }}" class="btn2">Add task</a>
+            </article>
+            {% endfor %}
+        </section>
+        {% else %}
+        <p class="empty-message">You don't have any projects yet. Start by adding one!</p>
+        {% endif %}
+    </main>
+
+    <script>
+        document.querySelectorAll(".progress").forEach(bar => {const progress = bar.getAttribute("data-progress");
+        console.log("Progress for bar:", progress); bar.style.width = progress + "%";});
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task - {{ project.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_task.css') }}">
+</head>
+<body>
+    <nav>
+        <h1>Task Manager</h1>
+        <div>
+            <span>
+                welcome {{ current_user.username }}!
+            </span>
+            <a href="{{ url_for('dashboard') }}" class="logout-btn">Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Add new task to project: {{ project.name }}</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <p>
+                <label for="title">Task Title</label>
+                {{ form.title }}
+            </p>
+
+            <p>
+                <label for="due_date">Due Date (YYYY-MM-DD)</label>
+                {{ form.due_date }}
+            </p>
+
+            <p>
+                <label for="description">Description</label>
+                {{ form.description }}
+            </p>
+
+            <p>
+                <label for="priority">Priority</label>
+                {{ form.priority }}
+            </p>
+
+            <p>{{ form.submit }}</p>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_dashboard.css') }}">
+</head>
+<body>
+    <nav>
+        <h1>Admin Dashboard</h1>
+        <div>
+            <span>Welcome Admin {{ current_user.username }}!</span>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+         </div>
+    </nav>
+
+<main>
+<section>
+    <h2>All Projects</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Progress</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.name }}</td>
+                <td>{{ project.description or 'No description' }}</td>
+                <td>{{ project.owner.username }}</td>
+                <td>{{ project.progress }}%</td>
+                <td><a href="{{ url_for('tasks', project_id=project.id) }}">View Tasks</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>All Users</h2>
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Full Name</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.phone or 'N/A' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+
+            <section>
+                <h2>Admin actions</h2>
+                <a href="{{ url_for('add_project') }}" class="btn">Add Project</a>
+                <a href="{{ url_for('manage_users') }}" class="btn">Manage Users</a>
+            </section>
+        </div>
+    </section>
+
+</main>
+
+</body>
+</html>

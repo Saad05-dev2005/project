@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_project.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Add new project</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="name">{{ form.name.label }}</label>
+                {{ form.name }}
+            </div>
+            <div>
+                <label for="description">{{ form.description.label }}</label>
+                {{ form.description }}
+            </div>
+            {% if current_user.role == "admin" %}
+            <div>
+                <label for="assign_to">{{ form.assign_to.label }}</label>
+                {{ form.assign_to }}
+            </div>
+            {% endif %}
+            <div>
+                {{ form.submit }}
+            </div>
+        </form>
+        <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

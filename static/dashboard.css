@@ -1,0 +1,104 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+nav{
+    background-color: #4a90ea;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+span{
+    margin-right: 15px;
+}
+
+.logout-btn{
+    background-color: #ff5c5c;
+    color: #fff;
+    border-radius: 15px;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+a:hover{
+    background-color: #e14b4b
+}
+
+main{
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+header{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.projects{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.project-card{
+     background-color: #fff;
+     border-radius: 10px;
+     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+     padding: 20px;
+     transition: transform 0.2s ease-in-out;
+}
+
+.project-card:hover{
+    transform: translateY(-5px)
+}
+
+.progress-bar{
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 20px;
+    margin: 10px 0;
+}
+
+.progress{
+    background: linear-gradient(90deg, #4caf50, #81c784);
+    height: 100%;
+    transition: width 1s ease-in-out;
+    width: 0;
+}
+
+.btn{
+    display: inline-block;
+    padding: 8px 14px;
+    background: #4a9032;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.btn2{
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.btn:hover{
+    background-color: #357abd;
+}
+
+.empty-message{
+    text-align: center;
+    color: #666;
+    margin-top: 30px;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.name }} - Tasks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='tasks.css') }}">
+</head>
+<body>
+    <nav>
+        <h1>Task Manager</h1>
+        <div>
+            <span>
+                welcome {{ current_user.username }}!
+            </span>
+            <a href="{{ url_for('dashboard') }}"class="top-btn">Dashboard</a>
+            <a href="{{ url_for('logout') }}"class="top-btn">Logout</a>
+         </div>
+    </nav>
+    <main>
+            <h2>Tasks for project: {{ project.name }}</h2> 
+            <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn">Add Task</a> 
+
+{% if project.tasks %}
+<table class="task-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Priority</th>
+            <th>Due Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in project.tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.priority }}</td>
+            <td>{{ task.due_date or "No deadline" }}</td>
+            <td>{{ task.description or "No description" }}</td>
+            <td>{{ task.status }}</td>
+            <td>
+                {% if task.status != 'completed' %}
+                <a href="{{ url_for('complete_task', task_id=task.id) }}" class="complete-btn">Mark as Completed</a>
+                {% else %}
+                <span class="completed">✔</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No tasks yet. Start by <a href="{{ url_for('add_task', project_id=project.id) }}">adding one</a>.</p>
+{% endif %}
+    </main>
+</body>
+</html>

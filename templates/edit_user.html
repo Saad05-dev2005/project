@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='edit_user.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Edit User: {{ user.username }}</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <p>{{ form.email.label }} {{ form.email }}</p>
+            <p>{{ form.username.label }} {{ form.username }}</p>
+            <p>{{ form.role.label }} {{ form.role }}</p>
+            <p>{{ form.first_name.label }} {{ form.first_name }}</p>
+            <p>{{ form.last_name.label }} {{ form.last_name }}</p>
+            <p>{{ form.phone.label }} {{ form.phone }}</p>
+            <p>{{ form.submit }}</p>
+        </form>
+        <a href="{{ url_for('manage_users') }}">← Back to Manage Users</a>
+    </div>
+</body>
+</html>

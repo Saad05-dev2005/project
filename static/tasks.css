@@ -1,0 +1,78 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+nav{
+    background-color: #4a90ea;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+span{
+    margin: 15px;
+}
+ .top-btn{
+    background-color: #ff5c5c;
+    color: #fff;
+    border-radius: 15px;
+    padding: 10px 15px;
+    text-decoration: none;
+ }
+
+ .top-btn:hover{
+    background-color: #e14b4b
+    }
+
+main{
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.task-table th, .task-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.task-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.task-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.complete-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.complete-btn:hover {
+    background-color: #218838;
+}
+
+.completed {
+    color: #28a745;
+    font-weight: bold;
+}
