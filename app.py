@@ -114,6 +114,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:logout_user()
     if request.method == 'POST':
         login_input = request.form.get('login')
         password = request.form.get('password')
@@ -325,4 +326,4 @@ if __name__ == '__main__':
         else:
             print("Admin user already exists.")
     app.run(debug=True)
-    app.run(host='0.0.0.0', port=5000)
+
