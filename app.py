@@ -8,6 +8,8 @@ from flask import abort
 from flask_wtf import FlaskForm
 from wtforms import DateField, SelectField, StringField, PasswordField, SubmitField, TextAreaField, ValidationError
 from wtforms.validators import DataRequired, Email, EqualTo, Length, input_required
+from flask_migrate import Migrate
+from wtforms.fields import DateField
 
 
 app = Flask(__name__)
@@ -33,6 +35,7 @@ class Project(db.Model):
     description = db.Column(db.Text, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     tasks = db.relationship('Task', backref='project', lazy=True)
+    deadline = db.Column(db.Date, nullable=False)
     
     @property
     def progress(self):
@@ -61,7 +64,8 @@ class ProjectForm(FlaskForm):
     name = StringField('Project Name', validators=[DataRequired(), Length(max=150)])
     description = TextAreaField('Description', validators=[Length(max=500)])
     assign_to = SelectField('Assign To', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('Create Project')  
+    submit = SubmitField('Create Project') 
+    deadline = DateField('Deadline', format='%Y-%m-%d', validators=[DataRequired()]) 
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -274,7 +278,7 @@ def add_project():
             form.assign_to.choices = [(current_user.id, current_user.username)]
             form.assign_to.data = current_user.id 
         if form.validate_on_submit():
-            project = Project(name=form.name.data.strip(), description=(form.description.data.strip() or None), user_id=form.assign_to.data)
+            project = Project(name=form.name.data.strip(), description=(form.description.data.strip() or None), user_id=form.assign_to.data, deadline=form.deadline.data)
             db.session.add(project)
             db.session.commit()
             flash("Project created successfully!", "success")

@@ -25,6 +25,7 @@
                 <th>Description</th>
                 <th>Owner</th>
                 <th>Progress</th>
+                <th>Deadline</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -35,6 +36,7 @@
                 <td>{{ project.description or 'No description' }}</td>
                 <td>{{ project.owner.username }}</td>
                 <td>{{ project.progress }}%</td>
+                <td>{{ project.deadline.strftime('%Y-%m-%d') }}</td>
                 <td><a href="{{ url_for('tasks', project_id=project.id) }}">View Tasks</a></td>
             </tr>
             {% endfor %}

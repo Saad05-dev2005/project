@@ -26,6 +26,11 @@
             </div>
             {% endif %}
             <div>
+            <div>
+                <label for="deadline">{{ form.deadline.label }}</label>
+                {{ form.deadline }}
+            </div>
+            <div>
                 {{ form.submit }}
             </div>
         </form>
