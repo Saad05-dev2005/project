@@ -19,17 +19,16 @@
                 <label for="description">{{ form.description.label }}</label>
                 {{ form.description }}
             </div>
+            <div>
+                <label for="deadline">{{ form.deadline.label }}</label>
+                {{ form.deadline }}
+            </div>
             {% if current_user.role == "admin" %}
             <div>
                 <label for="assign_to">{{ form.assign_to.label }}</label>
                 {{ form.assign_to }}
             </div>
             {% endif %}
-            <div>
-            <div>
-                <label for="deadline">{{ form.deadline.label }}</label>
-                {{ form.deadline }}
-            </div>
             <div>
                 {{ form.submit }}
             </div>

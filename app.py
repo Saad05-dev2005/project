@@ -10,6 +10,7 @@ from wtforms import DateField, SelectField, StringField, PasswordField, SubmitFi
 from wtforms.validators import DataRequired, Email, EqualTo, Length, input_required
 from flask_migrate import Migrate
 from wtforms.fields import DateField
+import os
 
 
 app = Flask(__name__)
@@ -28,6 +29,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(150), nullable=True)
     last_name = db.Column(db.String(150), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
+    is_superadmin = db.Column(db.Boolean, default=False)
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -79,7 +81,7 @@ class Task(db.Model):
 
 class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(max=150)])
-    due_date = DateField('Due Date', format='%Y-%m-%d', validators=[], default=None)
+    due_date = DateField('Due Date', format='%Y-%m-%d', validators=[DataRequired()])
     priority = SelectField('Priority', choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')], default='Medium')
     description = TextAreaField('Description', validators=[Length(max=500)])
     submit = SubmitField('Add Task')
@@ -237,6 +239,10 @@ def delete_user(user_id):
     if user.id == current_user.id:
         flash("You cannot delete your own account.", "warning")
         return redirect(url_for('manage_users'))
+    
+    if user.is_superadmin:
+        flash("You cannot delete a superadmin account.", "danger")
+        return redirect(url_for('manage_users'))
 
     db.session.delete(user)
     db.session.commit()
@@ -253,6 +259,10 @@ def toggle_role(user_id):
     user = User.query.get_or_404(user_id)
     if user.id == current_user.id:
         flash("You cannot change your own role.", "warning")
+        return redirect(url_for('manage_users'))
+
+    if user.is_superadmin:
+        flash("You cannot change the role of a superadmin.", "danger")
         return redirect(url_for('manage_users'))
 
     user.role = 'admin' if user.role == 'user' else 'user'
@@ -328,7 +338,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         if not User.query.filter_by(username='admin').first():
-            admin_user = User(email='admin@example.com', username='admin', password=generate_password_hash('admin123', method='pbkdf2:sha256', salt_length=8), role='admin')
+            admin_user = User(email='admin@example.com', username='admin', password=generate_password_hash('admin123', method='pbkdf2:sha256', salt_length=8), role='admin', is_superadmin=True)
             db.session.add(admin_user)
             db.session.commit()
             print("Admin user created with username 'admin' and password 'admin123'")
