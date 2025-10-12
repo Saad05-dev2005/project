@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='admin_dashboard.css') }}">
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
     <nav>
         <h1>Manage Users</h1>
         <div>

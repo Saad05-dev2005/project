@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
     <nav>
         <h1>Task Manager</h1>
         <div>
@@ -14,6 +21,12 @@
         <a href="{{ url_for('logout') }}"class="logout-btn">Logout</a>
          </div>
         </nav>
+        <section class="stats">
+  <div class="stat-card">Total Projects: {{ total_projects }}</div>
+  <div class="stat-card">Total Tasks: {{ total_tasks }}</div>
+  <div class="stat-card">Completed Tasks: {{ completed_tasks }}</div>
+  <div class="stat-card">Pending Tasks: {{ pending_tasks }}</div>
+</section>
     <main>
         <header>
             <h2>Your Project</h2>
@@ -39,10 +52,27 @@
         <p class="empty-message">You don't have any projects yet. Start by adding one!</p>
         {% endif %}
     </main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 
     <script>
-        document.querySelectorAll(".progress").forEach(bar => {const progress = bar.getAttribute("data-progress");
-        console.log("Progress for bar:", progress); bar.style.width = progress + "%";});
+        document.querySelectorAll(".progress").forEach(bar => {
+            const progress = bar.getAttribute("data-progress");
+            bar.style.width = progress + "%";
+        });
+        setTimeout(() => {
+            document.querySelectorAll('.flash').forEach(el => {
+                el.style.transition = 'opacity 0.5s';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500);
+            });
+        }, 3000);
     </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, abort, flash, render_template, request, redirect, url_for
+from flask import Flask, abort, flash, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user 
 from sqlalchemy import or_
@@ -46,6 +46,17 @@ class Project(db.Model):
             completed_tasks = sum(1 for task in self.tasks if task.status == 'completed')
             return int((completed_tasks / len(self.tasks)) * 100) 
     
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(150), nullable=False)
+    due_date = db.Column(db.Date, nullable=True)
+    priority = db.Column(db.String(20), nullable=False, default='Medium')
+    description = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(50), nullable=False, default='pending')
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=150)])
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=150)])
@@ -68,16 +79,6 @@ class ProjectForm(FlaskForm):
     assign_to = SelectField('Assign To', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Create Project') 
     deadline = DateField('Deadline', format='%Y-%m-%d', validators=[DataRequired()]) 
-
-class Task(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(150), nullable=False)
-    due_date = db.Column(db.Date, nullable=True)
-    priority = db.Column(db.String(20), nullable=False, default='Medium')
-    description = db.Column(db.Text, nullable=True)
-    status = db.Column(db.String(50), nullable=False, default='pending')
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 class TaskForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(max=150)])
@@ -152,14 +153,25 @@ def dashboard():
         complete_tasks = sum(1 for task in tasks if task.status == 'completed')
         pending_tasks = total_tasks - complete_tasks
         completion_rate = int((complete_tasks / total_tasks) * 100) if total_tasks > 0 else 0
-
         return render_template("admin_dashboard.html", projects=projects, users=users, tasks=tasks,
                                total_users=total_users, total_projects=total_projects,
                                total_tasks=total_tasks, complete_tasks=complete_tasks,
                                pending_tasks=pending_tasks, completion_rate=completion_rate)
     else:
         projects = Project.query.filter_by(user_id=current_user.id).all()
-        return render_template('dashboard.html', name=current_user.username, projects=projects)
+        tasks = Task.query.filter(Task.project_id.in_([p.id for p in projects])).all()
+        total_projects = len(projects)
+        total_tasks = len(tasks)
+        completed_tasks = sum(1 for task in tasks if task.status == 'completed')
+        pending_tasks = total_tasks - completed_tasks
+        return render_template('dashboard.html',
+                            name=current_user.username,
+                            projects=projects,
+                            total_projects=total_projects,
+                            total_tasks=total_tasks,
+                            completed_tasks=completed_tasks,
+                            pending_tasks=pending_tasks)
+
 
 def is_admin():
     return current_user.is_authenticated and current_user.role == "admin"
@@ -311,6 +323,7 @@ def complete_task(task_id):
 @app.route('/logout')
 @login_required
 def logout():
+    session.pop('_flashes', None)
     logout_user()
     return redirect(url_for('login'))
 

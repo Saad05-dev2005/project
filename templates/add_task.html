@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='add_task.css') }}">
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
     <nav>
         <h1>Task Manager</h1>
         <div>
@@ -46,5 +53,15 @@
             <p>{{ form.submit }}</p>
         </form>
     </div>
+<script>
+    // Auto-hide flash messages after 3 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.flash').forEach(el => {
+            el.style.transition = 'opacity 0.5s';
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 500);
+        });
+    }, 3000);
+</script>
 </body>
 </html>

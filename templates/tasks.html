@@ -17,7 +17,14 @@
             <a href="{{ url_for('logout') }}"class="top-btn">Logout</a>
          </div>
     </nav>
-    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <main>
             <h2>Tasks for project: {{ project.name }}</h2> 
             <a href="{{ url_for('add_task', project_id=project.id) }}" class="btn">Add Task</a> 
 
@@ -56,5 +63,15 @@
 <p>No tasks yet. Start by <a href="{{ url_for('add_task', project_id=project.id) }}">adding one</a>.</p>
 {% endif %}
     </main>
+<script>
+    // Auto-hide flash messages after 3 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.flash').forEach(el => {
+            el.style.transition = 'opacity 0.5s';
+            el.style.opacity = '0';
+            setTimeout(() => el.remove(), 500);
+        });
+    }, 3000);
+</script>
 </body>
 </html>

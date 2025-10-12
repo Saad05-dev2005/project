@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='edit_user.css') }}">
 </head>
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
     <div class="container">
         <h2>Edit User: {{ user.username }}</h2>
         <form method="POST">
